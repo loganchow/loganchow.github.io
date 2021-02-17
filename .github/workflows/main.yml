@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-18.04
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
 
@@ -19,7 +19,7 @@ jobs:
           hugo-version: latest
 
       - name: Build 
-        run: hugo
+        run: hugo --LoveIt
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
