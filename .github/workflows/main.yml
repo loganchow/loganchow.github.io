@@ -5,7 +5,7 @@ name: Deploy Hugo # 任君喜欢
 on:
   push:
     branches:
-      - master   # gh-pages 更新触发
+      - master   # master 更新触发
 
 jobs:
   build-deploy:
@@ -26,6 +26,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.DESKTOP_JEM5T6R }} # 填写你自己的 personal_token
-          # PUBLISH_BRANCH: gh-pages  # 推送到当前 master 分支
+          PUBLISH_BRANCH: gh-pages  # 推送到当前 master 分支
           PUBLISH_DIR: ./public  # hugo 生成到 public 作为跟目录
-          # commit_message: ${{ github.event.head_commit.message }}
+          commit_message: ${{ github.event.head_commit.message }}
