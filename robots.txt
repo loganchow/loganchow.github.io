@@ -1,1 +1,3 @@
 User-agent: *
+Disallow:
+Sitemap: https://loganchow.github.io/sitemap.xml

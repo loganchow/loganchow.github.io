@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Mens et Manus</title>
-    <link>https://loganchow.github.io/</link>
-    <description>Recent content on Mens et Manus</description>
+    <title>技术 on Mens et Manus</title>
+    <link>https://loganchow.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
+    <description>Recent content in 技术 on Mens et Manus</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 10 Jun 2020 01:58:30 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 10 Jun 2020 01:58:30 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>NVIDIA 驱动更新后 Chrome 黑屏故障排除记录</title>
       <link>https://loganchow.github.io/posts/nvdia_chrome_gpu_cache/</link>
@@ -14,8 +14,6 @@
       <guid>https://loganchow.github.io/posts/nvdia_chrome_gpu_cache/</guid>
       <description>NVIDIA 驱动更新后 Chrome 黑屏故障排除记录</description>
     </item>
-    
-    
     
   </channel>
 </rss>

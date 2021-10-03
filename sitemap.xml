@@ -1,1 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://loganchow.github.io/fr/sitemap.xml</loc></sitemap><sitemap><loc>https://loganchow.github.io/en/sitemap.xml</loc></sitemap><sitemap><loc>https://loganchow.github.io/zh-cn/sitemap.xml</loc><lastmod>2021-02-23T04:11:17+08:00</lastmod></sitemap><sitemap><loc>https://loganchow.github.io/de/sitemap.xml</loc></sitemap></sitemapindex>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://loganchow.github.io/categories/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/posts/nvdia_chrome_gpu_cache/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/posts/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/tags/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4/</loc>
+    <lastmod>2020-06-10T01:58:30+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/archives/</loc>
+  </url><url>
+    <loc>https://loganchow.github.io/search/</loc>
+  </url>
+</urlset>
