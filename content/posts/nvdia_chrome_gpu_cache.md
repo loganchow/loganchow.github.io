@@ -4,9 +4,10 @@ description: "NVIDIA 驱动更新后 Chrome 黑屏故障排除记录"
 date: 2020-06-10T01:58:30+08:00
 draft: false
 ShowToc: true
-TocOpen: true
+TocOpen: false
 categories: ["技术"]
 tags: ["故障排除"]
+disableShare: true
 ---
 
 ## 问题描述：

@@ -1,7 +1,7 @@
 baseURL: https://loganchow.github.io/
 defaultContentLanguage: "zh"
 title: Mens et Manus
-paginate: 5
+paginate: 10
 theme: PaperMod
 
 googleAnalytics: UA-138915624-1
