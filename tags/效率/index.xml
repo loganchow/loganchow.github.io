@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>效率 on Mens et Manus</title>
+    <link>https://loganchow.github.io/tags/%E6%95%88%E7%8E%87/</link>
+    <description>Recent content in 效率 on Mens et Manus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 03 Oct 2021 22:33:59 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/tags/%E6%95%88%E7%8E%87/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>幕布导出文档转 Markdown 格式</title>
+      <link>https://loganchow.github.io/posts/%E5%B9%95%E5%B8%83%E5%AF%BC%E5%87%BA%E6%96%87%E6%A1%A3%E8%BD%ACmd/</link>
+      <pubDate>Sun, 03 Oct 2021 22:33:59 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/posts/%E5%B9%95%E5%B8%83%E5%AF%BC%E5%87%BA%E6%96%87%E6%A1%A3%E8%BD%ACmd/</guid>
+      <description>幕布作为国产大纲笔记之光，整理思维导图和列写大纲文档非常方便。 但是幕布的导出文件只有一下几种格式：
+然而进行个人知识库整理时， markdown 格式会更加方便通用。
+记录一下网上找到的 OPML 格式转 markdown 的一个方法。
+前置条件  npm 包管理器  基本步骤  安装 opml-to-markdown, 输入命令： npm install opml-to-markdown -g  直接在 opml 文件所在目录下执行 opml-to-markdown {filename}.opml  复制生成的文本，粘贴到合适的 Markdown 编辑器里整理格式即可使用。   本文更多是测试新版本 Github Actions 和 PicGo 图床的可用性。
+ </description>
+    </item>
+    
+  </channel>
+</rss>

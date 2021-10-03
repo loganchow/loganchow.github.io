@@ -5,7 +5,43 @@
     <link>https://loganchow.github.io/tags/</link>
     <description>Recent content in Tags on Mens et Manus</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 18 Sep 2020 22:51:34 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Oct 2021 22:33:59 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>效率</title>
+      <link>https://loganchow.github.io/tags/%E6%95%88%E7%8E%87/</link>
+      <pubDate>Sun, 03 Oct 2021 22:33:59 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/tags/%E6%95%88%E7%8E%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>笔记</title>
+      <link>https://loganchow.github.io/tags/%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 03 Oct 2021 22:33:59 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/tags/%E7%AC%94%E8%AE%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>控制论</title>
+      <link>https://loganchow.github.io/tags/%E6%8E%A7%E5%88%B6%E8%AE%BA/</link>
+      <pubDate>Sun, 03 Oct 2021 22:31:09 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/tags/%E6%8E%A7%E5%88%B6%E8%AE%BA/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>疫情</title>
+      <link>https://loganchow.github.io/tags/%E7%96%AB%E6%83%85/</link>
+      <pubDate>Sun, 03 Oct 2021 22:31:09 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/tags/%E7%96%AB%E6%83%85/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>演讲</title>
       <link>https://loganchow.github.io/tags/%E6%BC%94%E8%AE%B2/</link>
@@ -25,6 +61,15 @@
     </item>
     
     <item>
+      <title>ROS</title>
+      <link>https://loganchow.github.io/tags/ros/</link>
+      <pubDate>Thu, 18 Jun 2020 22:24:42 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/tags/ros/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>故障排除</title>
       <link>https://loganchow.github.io/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4/</link>
       <pubDate>Wed, 10 Jun 2020 01:58:30 +0800</pubDate>
@@ -34,29 +79,20 @@
     </item>
     
     <item>
-      <title>实用文</title>
-      <link>https://loganchow.github.io/tags/%E5%AE%9E%E7%94%A8%E6%96%87/</link>
+      <title>生活</title>
+      <link>https://loganchow.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
       <pubDate>Wed, 01 May 2019 23:59:57 +0800</pubDate>
       
-      <guid>https://loganchow.github.io/tags/%E5%AE%9E%E7%94%A8%E6%96%87/</guid>
+      <guid>https://loganchow.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>投资</title>
-      <link>https://loganchow.github.io/tags/%E6%8A%95%E8%B5%84/</link>
+      <title>自我管理</title>
+      <link>https://loganchow.github.io/tags/%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86/</link>
       <pubDate>Wed, 01 May 2019 23:59:57 +0800</pubDate>
       
-      <guid>https://loganchow.github.io/tags/%E6%8A%95%E8%B5%84/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>青年人</title>
-      <link>https://loganchow.github.io/tags/%E9%9D%92%E5%B9%B4%E4%BA%BA/</link>
-      <pubDate>Wed, 01 May 2019 23:59:57 +0800</pubDate>
-      
-      <guid>https://loganchow.github.io/tags/%E9%9D%92%E5%B9%B4%E4%BA%BA/</guid>
+      <guid>https://loganchow.github.io/tags/%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86/</guid>
       <description></description>
     </item>
     
