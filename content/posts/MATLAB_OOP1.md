@@ -39,7 +39,7 @@ disableShare: true
    ```
 2. 类属性的set方法
    ```m
-   `function obj = set.ClassName(obj, PropertyContent)
+   function obj = set.ClassName(obj, PropertyContent)
         if (strcmpi(PropertyContent,'允许值'))
             obj.PropertyName = PropertyContent
         else
@@ -62,5 +62,3 @@ disableShare: true
     end
     ```
     `set` 方法一般不允许设置，但可以自定义错误消息内容。
-
-4. 
