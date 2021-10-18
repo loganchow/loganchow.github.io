@@ -27,6 +27,7 @@ disableShare: true
   - `handle` 句柄，其实就是类指针，传指针效率肯定高于传值
 - 除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function
 - 类方法尽量也使用向量化的函数
+- 要展示对象的状态可以重载 `disp` 函数；要用图表的形式展示类可以重载 `plot` 函数
 
 
 ### 常用语句
@@ -47,5 +48,19 @@ disableShare: true
    end
    ```
 
-3. 类函数
+3. 按需计算的类属性（易变值）
+    ```matlab
+    properties (Dependent)
+        Modulus
+    end
+
+    methods
+        function modulus = get.Modulus(obj)
+            ind = find(obj.Strain > 0);
+            modulus = mean(obj.Stress(ind)./obj.Strain(ind));
+        end
+    end
+    ```
+    `set` 方法一般不允许设置，但可以自定义错误消息内容。
+
 4. 
