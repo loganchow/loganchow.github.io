@@ -2,7 +2,7 @@
 title: "MATLAB 面向对象编程 小结1"
 date: 2021-10-18T20:11:20+08:00
 draft: true
-tags: ["面向对象"，"OOP","MATLAB"]
+tags: ["面向对象","OOP","MATLAB"]
 categories: ["编程"]
 showToc: true
 TocOpen: false
