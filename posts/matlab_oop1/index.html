@@ -9,7 +9,7 @@
 @ 号 @ 号开头的文件夹代表 class
 类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
 properties(SetAccess = private/protected/public) end   类属性的set方法
-`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
 <meta name=author content="Me">
 <link rel=canonical href=https://loganchow.github.io/posts/matlab_oop1/>
 <link crossorigin=anonymous href=/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw+W8mWdq36u97PLc=" rel="preload stylesheet" as=style>
@@ -31,7 +31,7 @@ properties(SetAccess = private/protected/public) end   类属性的set方法
 @ 号 @ 号开头的文件夹代表 class
 类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
 properties(SetAccess = private/protected/public) end   类属性的set方法
-`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://loganchow.github.io/posts/matlab_oop1/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2021-10-18T20:11:20+08:00">
@@ -42,9 +42,9 @@ properties(SetAccess = private/protected/public) end   类属性的set方法
 @ 号 @ 号开头的文件夹代表 class
 类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
 properties(SetAccess = private/protected/public) end   类属性的set方法
-`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
 <script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://loganchow.github.io/posts/"},{"@type":"ListItem","position":2,"name":"MATLAB 面向对象编程 小结1","item":"https://loganchow.github.io/posts/matlab_oop1/"}]}</script>
-<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"MATLAB 面向对象编程 小结1","name":"MATLAB 面向对象编程 小结1","description":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\n`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,\u0026#39;允许值\u0026#39;)) obj.PropertyName = PropertyContent else error(\u0026#34;Invalid\u0026#34;); end end   按需计算的类属性（易变值）","keywords":["面向对象","OOP","MATLAB"],"articleBody":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\n`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(\"Invalid\"); end end   按需计算的类属性（易变值）\nproperties (Dependent) Modulus end methods function modulus = get.Modulus(obj) ind = find(obj.Strain  0); modulus = mean(obj.Stress(ind)./obj.Strain(ind)); end end set 方法一般不允许设置，但可以自定义错误消息内容。\n   ","wordCount":"80","inLanguage":"zh","datePublished":"2021-10-18T20:11:20+08:00","dateModified":"2021-10-18T20:11:20+08:00","author":{"@type":"Person","name":"Me"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loganchow.github.io/posts/matlab_oop1/"},"publisher":{"@type":"Organization","name":"Mens et Manus","logo":{"@type":"ImageObject","url":"https://loganchow.github.io/favicon.ico"}}}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"MATLAB 面向对象编程 小结1","name":"MATLAB 面向对象编程 小结1","description":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\nfunction obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,\u0026#39;允许值\u0026#39;)) obj.PropertyName = PropertyContent else error(\u0026#34;Invalid\u0026#34;); end end   按需计算的类属性（易变值）","keywords":["面向对象","OOP","MATLAB"],"articleBody":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\nfunction obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(\"Invalid\"); end end   按需计算的类属性（易变值）\nproperties (Dependent) Modulus end methods function modulus = get.Modulus(obj) ind = find(obj.Strain  0); modulus = mean(obj.Stress(ind)./obj.Strain(ind)); end end set 方法一般不允许设置，但可以自定义错误消息内容。\n  ","wordCount":"80","inLanguage":"zh","datePublished":"2021-10-18T20:11:20+08:00","dateModified":"2021-10-18T20:11:20+08:00","author":{"@type":"Person","name":"Me"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loganchow.github.io/posts/matlab_oop1/"},"publisher":{"@type":"Organization","name":"Mens et Manus","logo":{"@type":"ImageObject","url":"https://loganchow.github.io/favicon.ico"}}}</script>
 </head>
 <body id=top>
 <script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
@@ -141,7 +141,7 @@ MATLAB 面向对象编程 小结1<sup><span class=entry-isdraft>&nbsp;&nbsp;[dra
 </code></pre></div></li>
 <li>
 <p>类属性的set方法</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-m data-lang=m>`<span style=color:#66d9ef>function</span> obj = set.ClassName(obj, PropertyContent)
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-m data-lang=m><span style=color:#66d9ef>function</span> obj = <span style=color:#a6e22e>set.ClassName</span>(obj, PropertyContent)
      <span style=color:#66d9ef>if</span> (strcmpi(PropertyContent,<span style=color:#e6db74>&#39;允许值&#39;</span>))
          obj.PropertyName = PropertyContent
      <span style=color:#66d9ef>else</span>
@@ -163,7 +163,6 @@ MATLAB 面向对象编程 小结1<sup><span class=entry-isdraft>&nbsp;&nbsp;[dra
 <span style=color:#66d9ef>end</span>
 </code></pre></div><p><code>set</code> 方法一般不允许设置，但可以自定义错误消息内容。</p>
 </li>
-<li></li>
 </ol>
 </div>
 <footer class=post-footer>
