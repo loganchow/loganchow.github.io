@@ -1,0 +1,199 @@
+<!doctype html><html lang=zh dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>MATLAB 面向对象编程 小结1 | Mens et Manus</title>
+<meta name=keywords content="面向对象,OOP,MATLAB">
+<meta name=description content="文件组织 + 号 + 号开头的文件夹代表 package
+@ 号 @ 号开头的文件夹代表 class
+类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
+properties(SetAccess = private/protected/public) end   类属性的set方法
+`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+<meta name=author content="Me">
+<link rel=canonical href=https://loganchow.github.io/posts/matlab_oop1/>
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw+W8mWdq36u97PLc=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://loganchow.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://loganchow.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://loganchow.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://loganchow.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=https://loganchow.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.88.1">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-138915624-1','auto'),ga('send','pageview'))</script><meta property="og:title" content="MATLAB 面向对象编程 小结1">
+<meta property="og:description" content="文件组织 + 号 + 号开头的文件夹代表 package
+@ 号 @ 号开头的文件夹代表 class
+类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
+properties(SetAccess = private/protected/public) end   类属性的set方法
+`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://loganchow.github.io/posts/matlab_oop1/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-18T20:11:20+08:00">
+<meta property="article:modified_time" content="2021-10-18T20:11:20+08:00"><meta property="og:site_name" content="Mens et Manus">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="MATLAB 面向对象编程 小结1">
+<meta name=twitter:description content="文件组织 + 号 + 号开头的文件夹代表 package
+@ 号 @ 号开头的文件夹代表 class
+类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
+properties(SetAccess = private/protected/public) end   类属性的set方法
+`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(&#34;Invalid&#34;); end end   按需计算的类属性（易变值）">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://loganchow.github.io/posts/"},{"@type":"ListItem","position":2,"name":"MATLAB 面向对象编程 小结1","item":"https://loganchow.github.io/posts/matlab_oop1/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"MATLAB 面向对象编程 小结1","name":"MATLAB 面向对象编程 小结1","description":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\n`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,\u0026#39;允许值\u0026#39;)) obj.PropertyName = PropertyContent else error(\u0026#34;Invalid\u0026#34;); end end   按需计算的类属性（易变值）","keywords":["面向对象","OOP","MATLAB"],"articleBody":"文件组织 + 号 + 号开头的文件夹代表 package\n@ 号 @ 号开头的文件夹代表 class\n类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性\nproperties(SetAccess = private/protected/public) end   类属性的set方法\n`function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error(\"Invalid\"); end end   按需计算的类属性（易变值）\nproperties (Dependent) Modulus end methods function modulus = get.Modulus(obj) ind = find(obj.Strain  0); modulus = mean(obj.Stress(ind)./obj.Strain(ind)); end end set 方法一般不允许设置，但可以自定义错误消息内容。\n   ","wordCount":"80","inLanguage":"zh","datePublished":"2021-10-18T20:11:20+08:00","dateModified":"2021-10-18T20:11:20+08:00","author":{"@type":"Person","name":"Me"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loganchow.github.io/posts/matlab_oop1/"},"publisher":{"@type":"Organization","name":"Mens et Manus","logo":{"@type":"ImageObject","url":"https://loganchow.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://loganchow.github.io/ accesskey=h title="Logan's Space (Alt + H)">Logan's Space</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://loganchow.github.io/archives title=归档>
+<span>归档</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/categories/ title=分类>
+<span>分类</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/search/ title=搜索>
+<span>搜索</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/tags/ title=标签>
+<span>标签</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://loganchow.github.io/>主页</a>&nbsp;»&nbsp;<a href=https://loganchow.github.io/posts/>Posts</a></div>
+<h1 class=post-title>
+MATLAB 面向对象编程 小结1<sup><span class=entry-isdraft>&nbsp;&nbsp;[draft]</span></sup>
+</h1>
+<div class=post-meta>October 18, 2021&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me&nbsp;|&nbsp;<a href=https://github.com/loganchow/loganchow.github.io/content/posts/MATLAB_OOP1.md rel="noopener noreferrer" target=_blank>Suggest Changes</a>
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>目录</span>
+</summary>
+<div class=inner><ul>
+<li>
+<a href=#%e6%96%87%e4%bb%b6%e7%bb%84%e7%bb%87 aria-label=文件组织>文件组织</a><ul>
+<ul>
+<li>
+<a href=#-%e5%8f%b7 aria-label="+ 号">+ 号</a></li></ul>
+<li>
+<a href=#-%e5%8f%b7-1 aria-label="@ 号">@ 号</a></li></ul>
+</li>
+<li>
+<a href=#%e7%b1%bb%e6%96%87%e4%bb%b6%e5%a4%b9%e5%86%85%e7%9a%84%e7%b1%bb%e5%ae%9a%e4%b9%89 aria-label=类文件夹内的类定义>类文件夹内的类定义</a></li>
+<li>
+<a href=#%e5%b8%b8%e7%94%a8%e8%af%ad%e5%8f%a5 aria-label=常用语句>常用语句</a>
+</li>
+</ul>
+</div>
+</details>
+</div>
+<div class=post-content><h3 id=文件组织>文件组织<a hidden class=anchor aria-hidden=true href=#文件组织>#</a></h3>
+<h5 id=-号>+ 号<a hidden class=anchor aria-hidden=true href=#-号>#</a></h5>
+<p>+ 号开头的文件夹代表 package</p>
+<h4 id=-号-1>@ 号<a hidden class=anchor aria-hidden=true href=#-号-1>#</a></h4>
+<p>@ 号开头的文件夹代表 class</p>
+<h3 id=类文件夹内的类定义>类文件夹内的类定义<a hidden class=anchor aria-hidden=true href=#类文件夹内的类定义>#</a></h3>
+<ul>
+<li>表示类定义的文件名和 <code>@</code> 文件夹名字要一样</li>
+<li>类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 <code>function</code> 关键词）</li>
+<li>基类的声明尽量继承自 <code>handle</code> 超类
+<ul>
+<li><code>handle</code> 句柄，其实就是类指针，传指针效率肯定高于传值</li>
+</ul>
+</li>
+<li>除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function</li>
+<li>类方法尽量也使用向量化的函数</li>
+<li>要展示对象的状态可以重载 <code>disp</code> 函数；要用图表的形式展示类可以重载 <code>plot</code> 函数</li>
+</ul>
+<h3 id=常用语句>常用语句<a hidden class=anchor aria-hidden=true href=#常用语句>#</a></h3>
+<ol>
+<li>
+<p>类成员的属性</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-matlab data-lang=matlab> <span style=color:#66d9ef>properties</span>(SetAccess = private<span style=color:#f92672>/</span>protected<span style=color:#f92672>/</span>public)
+
+ <span style=color:#66d9ef>end</span>
+</code></pre></div></li>
+<li>
+<p>类属性的set方法</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-m data-lang=m>`<span style=color:#66d9ef>function</span> obj = set.ClassName(obj, PropertyContent)
+     <span style=color:#66d9ef>if</span> (strcmpi(PropertyContent,<span style=color:#e6db74>&#39;允许值&#39;</span>))
+         obj.PropertyName = PropertyContent
+     <span style=color:#66d9ef>else</span>
+         error(&#34;Invalid&#34;);
+     <span style=color:#66d9ef>end</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div></li>
+<li>
+<p>按需计算的类属性（易变值）</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-matlab data-lang=matlab><span style=color:#66d9ef>properties</span> (Dependent)
+    Modulus
+<span style=color:#66d9ef>end</span>
+
+<span style=color:#66d9ef>methods</span>
+<span style=color:#66d9ef>    function</span> modulus = <span style=color:#a6e22e>get.Modulus</span>(obj)
+        ind = find(obj.Strain <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
+        modulus = mean(obj.Stress(ind)<span style=color:#f92672>./</span>obj.Strain(ind));
+    <span style=color:#66d9ef>end</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p><code>set</code> 方法一般不允许设置，但可以自定义错误消息内容。</p>
+</li>
+<li></li>
+</ol>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://loganchow.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/>面向对象</a></li>
+<li><a href=https://loganchow.github.io/tags/oop/>OOP</a></li>
+<li><a href=https://loganchow.github.io/tags/matlab/>MATLAB</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=https://loganchow.github.io/posts/%E4%B8%AA%E4%BA%BA%E7%9F%A5%E8%AF%86%E5%BA%931/>
+<span class=title>下一页 »</span>
+<br>
+<span>个人知识库实践(一) —— Obisidian</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2021 <a href=https://loganchow.github.io/>Mens et Manus</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://git.io/hugopapermod rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)},document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
