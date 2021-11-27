@@ -85,6 +85,22 @@
 </article>
 <article class=post-entry>
 <header class=entry-header>
+<h2>MATLAB 面向对象编程 小结2<sup><span class=entry-isdraft>&nbsp;&nbsp;[draft]</span></sup>
+</h2>
+</header>
+<section class=entry-content>
+<p>类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。
+类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。
+classdef A &lt; B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。
+为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：
+a = zeros(500, 100, 'single'); 还要一些其他的注意事项：
+避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。 因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。 定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。 向量化运算 老生常谈了，少用for循环，多用内置函数。...</p>
+</section>
+<footer class=entry-footer>November 27, 2021&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me</footer>
+<a class=entry-link aria-label="post link to MATLAB 面向对象编程 小结2" href=https://loganchow.github.io/posts/matlab_oop2/></a>
+</article>
+<article class=post-entry>
+<header class=entry-header>
 <h2>MATLAB 面向对象编程 小结1
 </h2>
 </header>
@@ -93,7 +109,8 @@
 @ 号 @ 号开头的文件夹代表 class
 类文件夹内的类定义 表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类 handle 句柄，其实就是类指针，传指针效率肯定高于传值 除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数 常用语句 类成员的属性
 properties(SetAccess = private/protected/public) end 类属性的set方法
-function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error("Invalid"); end end 按需计算的类属性（易变值）...</p>
+function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'允许值')) obj.PropertyName = PropertyContent else error("Invalid"); end end 一般set方法不允许用户自行设置，但可以用来作为入参检查。
+按需计算的类属性（易变值）...</p>
 </section>
 <footer class=entry-footer>October 18, 2021&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me</footer>
 <a class=entry-link aria-label="post link to MATLAB 面向对象编程 小结1" href=https://loganchow.github.io/posts/matlab_oop1/></a>
@@ -119,10 +136,11 @@ function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,'
 <section class=entry-content>
 <p>1. 个人知识库的必要性 曾几何时，学习新事物的最好方式是去图书馆或者是书店找一本专业书来看，边看边练边学。后来有了互联网，在互联网分享精神的倡导下，学习新事物不需要再跑遍全城只为一本“秘籍”，坐在家中点几下鼠标浩如烟海的知识便如繁花般涌现。现在，在互联网公司所提倡的知识付费的倡导下，想要在互联网上获取高质量、系统性、免费分享的知识，反而变成了一项繁琐的工作。大部分时候，我们获取到的都是诸如微博、豆瓣一类的只言片语的知识，抑或是 CSDN 等博客形式寥寥草草的短篇，抑或是知乎一类 Q&A 形式的问答题。往往是遇到问题直接照搬答案，不求甚解。或是加入收藏夹后便永不打开直到链接过期。加之于遗忘曲线的自然规律，现代互联网反而是不利于系统性学习新技能与新知识的。因此，利用好采集、整理、复习、输出的相关工具，是在短期内现代互联网精神作用下，学习新事物最为可行也最为有效的方案。
 个人知识库，也叫个人 Wiki，其实可以理解成一个高级的笔记本，上面记录了你所学习过的知识，并顺带提供了支持诸如：笔记无限层级、双向链接、卡片笔记、版本管理、MD语法支持、多端同步等等。其主要目的便是知识的快速收集与沉淀、快速查找以方便复习，以及用费曼学习法的方式逼迫自己去吸收、理解消化并以自己理解的方式输出。
-«««&lt; HEAD
-2. 个人知识库平台的选择 传统笔记工具诸如 Evernote、为知笔记、有道云笔记等，在充分利用好笔记层级和标签功能的情况下，其实可以实现一定程度的知识管理，但由于层级管理是这类笔记唯一的组织方式，因此笔记组织形式是线性的树形结构，无返满足现代知识体系中大量存在的笔记之间的非线性联系。类似的有，幕布、RemNote、Workflowy 等大纲笔记工具，其以无限层级为特色，可以实现大纲与思维导图之间方便的转换，但是依然无法满足笔记之间的非线性联系。 去年，Roam Research 这款双向链接为特色的笔记工具以新颖的组织模式和高昂的售价（每月15美刀）吸引了大批的关注，类似的产品以及现有产品的类似功能升级纷至沓来。其中较为优异的模仿者包括 Obsidian 和 Logseq，前者面向本地化数据管理，后者面向云端同步。
+2. 个人知识库平台的选择 传统笔记工具诸如 Evernote、为知笔记、有道云笔记等，在充分利用好笔记层级和标签功能的情况下，其实可以实现一定程度的知识管理，但由于层级管理是这类笔记唯一的组织方式，因此笔记组织形式是线性的树形结构，无返满足现代知识体系中大量存在的笔记之间的非线性联系。类似的有，幕布、RemNote、Workflowy 等大纲笔记工具，其以无限层级为特色，可以实现大纲与思维导图之间方便的转换，但是依然无法满足笔记之间的非线性联系。
+去年，Roam Research 这款双向链接为特色的笔记工具以新颖的组织模式和高昂的售价（每月15美刀）吸引了大批的关注，类似的产品以及现有产品的类似功能升级纷至沓来。其中较为优异的模仿者包括 Obsidian 和 Logseq，前者面向本地化数据管理，后者面向云端同步。
 此外，关于卡片笔记法的讨论当下也空前热烈，其组织形式包含了双向链接的特点，又十分契合当下碎片化信息的特质，也吸引到了大批的关注，前文中提到的 Obsidian 也囊括了卡片笔记的功能。
-以 Notion、我来、Walling 为代表的基于块的笔记也吸引到了大批的粉丝。无限层级的页面管理，面板式的素材整理，高级的数据库与公式支持也吸引了一批死忠用户，尤其是 Notion，其免费的教育版也使得其成为我目前的主力知识管理工具。 从本篇开始，我会从 Obsidian 和 Notion 两款工具作为切入点，分享自己在利用它们建立围绕科研、秋招、生活等方面的个人知识库时的一点心得与经验。
+以 Notion、我来、Walling 为代表的基于块的笔记也吸引到了大批的粉丝。无限层级的页面管理，面板式的素材整理，高级的数据库与公式支持也吸引了一批死忠用户，尤其是 Notion，其免费的教育版也使得其成为我目前的主力知识管理工具。
+从本篇开始，我会从 Obsidian 和 Notion 两款工具作为切入点，分享自己在利用它们建立围绕科研、秋招、生活等方面的个人知识库时的一点心得与经验。
 3. 选择 Obsidian 的原因 客户端本体免费 多终端支持 非常美观，皮肤支持 CSS 自定义 自带功能丰富（双向链接、日记、卡片笔记），社区插件提供了更多的可能性 将文档库置于同步盘目录下即可实现多端同步，无需购买官方的收费 Sync 服务 网上相关资源丰富，学习成本低 Markdown 语法支持全面 4. Obsidian 在生活中的实践 （未完待续）</p>
 </section>
 <footer class=entry-footer>October 5, 2021&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me</footer>

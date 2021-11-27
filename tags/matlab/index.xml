@@ -5,7 +5,21 @@
     <link>https://loganchow.github.io/tags/matlab/</link>
     <description>Recent content in MATLAB on Mens et Manus</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 18 Oct 2021 20:11:20 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/tags/matlab/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 27 Nov 2021 15:31:23 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/tags/matlab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MATLAB 面向对象编程 小结2</title>
+      <link>https://loganchow.github.io/posts/matlab_oop2/</link>
+      <pubDate>Sat, 27 Nov 2021 15:31:23 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/posts/matlab_oop2/</guid>
+      <description>类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。
+类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。
+classdef A &amp;lt; B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。
+为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：
+a = zeros(500, 100, &#39;single&#39;); 还要一些其他的注意事项：
+ 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。</description>
+    </item>
+    
     <item>
       <title>MATLAB 面向对象编程 小结1</title>
       <link>https://loganchow.github.io/posts/matlab_oop1/</link>
@@ -16,7 +30,8 @@
 @ 号 @ 号开头的文件夹代表 class
 类文件夹内的类定义  表示类定义的文件名和 @ 文件夹名字要一样 类中方法的实现可以写成单独的函数文件，类体内仅作声明（去掉 function 关键词） 基类的声明尽量继承自 handle 超类  handle 句柄，其实就是类指针，传指针效率肯定高于传值   除非项目内容很多，其实 MATLAB OOP 的效率不高，主要归咎于 MATLAB 的函数入栈机制。因此在保证代码的可维护性和可读性情况下，尽量直接用表达式和 built-in function 类方法尽量也使用向量化的函数 要展示对象的状态可以重载 disp 函数；要用图表的形式展示类可以重载 plot 函数  常用语句   类成员的属性
 properties(SetAccess = private/protected/public) end   类属性的set方法
-function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,&amp;#39;允许值&amp;#39;)) obj.PropertyName = PropertyContent else error(&amp;#34;Invalid&amp;#34;); end end   按需计算的类属性（易变值）</description>
+function obj = set.ClassName(obj, PropertyContent) if (strcmpi(PropertyContent,&amp;#39;允许值&amp;#39;)) obj.PropertyName = PropertyContent else error(&amp;#34;Invalid&amp;#34;); end end 一般set方法不允许用户自行设置，但可以用来作为入参检查。
+  按需计算的类属性（易变值）</description>
     </item>
     
   </channel>

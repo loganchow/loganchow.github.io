@@ -1,0 +1,212 @@
+<!doctype html><html lang=zh dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>MATLAB 面向对象编程 小结2 | Mens et Manus</title>
+<meta name=keywords content="面向对象,OOP,MATLAB">
+<meta name=description content="类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。
+类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。
+classdef A < B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。
+为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：
+a = zeros(500, 100, 'single'); 还要一些其他的注意事项：
+ 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。">
+<meta name=author content="Me">
+<link rel=canonical href=https://loganchow.github.io/posts/matlab_oop2/>
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw+W8mWdq36u97PLc=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://loganchow.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://loganchow.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://loganchow.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://loganchow.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=https://loganchow.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.4">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-138915624-1','auto'),ga('send','pageview'))</script><meta property="og:title" content="MATLAB 面向对象编程 小结2">
+<meta property="og:description" content="类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。
+类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。
+classdef A < B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。
+为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：
+a = zeros(500, 100, 'single'); 还要一些其他的注意事项：
+ 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://loganchow.github.io/posts/matlab_oop2/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-11-27T15:31:23+08:00">
+<meta property="article:modified_time" content="2021-11-27T15:31:23+08:00"><meta property="og:site_name" content="Mens et Manus">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="MATLAB 面向对象编程 小结2">
+<meta name=twitter:description content="类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。
+类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。
+classdef A < B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。
+为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：
+a = zeros(500, 100, 'single'); 还要一些其他的注意事项：
+ 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://loganchow.github.io/posts/"},{"@type":"ListItem","position":2,"name":"MATLAB 面向对象编程 小结2","item":"https://loganchow.github.io/posts/matlab_oop2/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"MATLAB 面向对象编程 小结2","name":"MATLAB 面向对象编程 小结2","description":"类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。\n类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。\nclassdef A \u0026lt; B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。\n为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：\na = zeros(500, 100, 'single'); 还要一些其他的注意事项：\n 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。","keywords":["面向对象","OOP","MATLAB"],"articleBody":"类的组合 类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 properties 中。\n类的继承 在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。 接着需要在构造函数中用@调用超类的构造函数来创造子类的成员与方法。\nclassdef A  B methods function obj = A(~) obj@B(~); end end end MATLAB 性能优化 内存角度 MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。\n为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：\na = zeros(500, 100, 'single'); 还要一些其他的注意事项：\n 避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。  因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码： a = 1; b = a; MATLAB 不会创建一个新的 b 变量，而是让 b 数值句柄指向 1 的内存空间。此时进行下列操作： b = 2; 此时会创建一个新的常量为 2，并让 b 指向这个新的内存空间。而 a 依然指向 1 的变量空间。   定期回收内存。把大数据、大变量保存到文件中，并使用 matfile 函数去访问 mat 文件中的变量，而不必将文件全部加载到内存中；使用 pack 函数对 MATLAB 的内存空间进行整理。  向量化运算 老生常谈了，少用for循环，多用内置函数。\n 例子：消除冗余元素 有许多不同的方法可以用来查找向量的冗余元素。一种方法涉及到函数 diff。在对向量元素进行排序后，当您对该向量使用 diff 函数时，相等的邻接元素会产生零项。因为 diff(x) 生成的向量的元素数比 x 少一个，所以您必须添加一个不等于该集中的任何其他元素的元素。NaN 始终满足此条件。最后，您可以使用逻辑索引来选择该集中的唯一元素：\n x = [2 1 2 2 3 1 3 2 1 3]; x = sort(x); difference = diff([x,NaN]); y = x(difference~=0) 特例：动态编译 JIT 与向量化的对比 考察以下代码：\nclear; y = [3; 4; 1; 10; 9; 9; 4; 2; ]; tic m = length(y); Y = zeros(m, 10); for i = 1:m Y(i, y(i)) = 1; end toc 历时 0.005438 秒。\nclear(\"Y\",\"m\",\"i\"); tic Y = full(sparse(1:length(y), y, ones(length(y),1))); toc 历时 0.021157 秒。\n结论\n按照一般性的认知，第二段代码采用了向量化的方法，与第一段使用 for 循环的代码相比，应当拥有更好的性能。但实际上，第一段代码的耗时是第二段的四分之一。原因是 MATLAB 会针对某些循环语句采用 JIT 优化，此时在编译层面上对代码的性能进行了优化，因此运行速度反超了向量化代码。\n","wordCount":"163","inLanguage":"zh","datePublished":"2021-11-27T15:31:23+08:00","dateModified":"2021-11-27T15:31:23+08:00","author":{"@type":"Person","name":"Me"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loganchow.github.io/posts/matlab_oop2/"},"publisher":{"@type":"Organization","name":"Mens et Manus","logo":{"@type":"ImageObject","url":"https://loganchow.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://loganchow.github.io/ accesskey=h title="Logan's Space (Alt + H)">Logan's Space</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://loganchow.github.io/archives title=归档>
+<span>归档</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/categories/ title=分类>
+<span>分类</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/search/ title=搜索>
+<span>搜索</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/tags/ title=标签>
+<span>标签</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://loganchow.github.io/>主页</a>&nbsp;»&nbsp;<a href=https://loganchow.github.io/posts/>Posts</a></div>
+<h1 class=post-title>
+MATLAB 面向对象编程 小结2<sup><span class=entry-isdraft>&nbsp;&nbsp;[draft]</span></sup>
+</h1>
+<div class=post-meta>November 27, 2021&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me&nbsp;|&nbsp;<a href=https://github.com/loganchow/loganchow.github.io/content/posts/MATLAB_OOP2.md rel="noopener noreferrer" target=_blank>Suggest Changes</a>
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>目录</span>
+</summary>
+<div class=inner><ul>
+<li>
+<a href=#%e7%b1%bb%e7%9a%84%e7%bb%84%e5%90%88 aria-label=类的组合>类的组合</a></li>
+<li>
+<a href=#%e7%b1%bb%e7%9a%84%e7%bb%a7%e6%89%bf aria-label=类的继承>类的继承</a></li>
+<li>
+<a href=#matlab-%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96 aria-label="MATLAB 性能优化">MATLAB 性能优化</a><ul>
+<li>
+<a href=#%e5%86%85%e5%ad%98%e8%a7%92%e5%ba%a6 aria-label=内存角度>内存角度</a></li>
+<li>
+<a href=#%e5%90%91%e9%87%8f%e5%8c%96%e8%bf%90%e7%ae%97 aria-label=向量化运算>向量化运算</a></li>
+<li>
+<a href=#%e7%89%b9%e4%be%8b%e5%8a%a8%e6%80%81%e7%bc%96%e8%af%91-jit-%e4%b8%8e%e5%90%91%e9%87%8f%e5%8c%96%e7%9a%84%e5%af%b9%e6%af%94 aria-label="特例：动态编译 JIT 与向量化的对比">特例：动态编译 JIT 与向量化的对比</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</details>
+</div>
+<div class=post-content><h3 id=类的组合>类的组合<a hidden class=anchor aria-hidden=true href=#类的组合>#</a></h3>
+<p>类的组合通过在组合类的构造函数中直接调用子类的构造函数，并将生成的对象作为组合类的成员加入到 <code>properties</code> 中。</p>
+<h3 id=类的继承>类的继承<a hidden class=anchor aria-hidden=true href=#类的继承>#</a></h3>
+<p>在 MATLAB 中，父类叫做超类。子类继承超类首先需要声明继承。
+接着需要在构造函数中用<code>@</code>调用超类的构造函数来创造子类的成员与方法。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-matlab data-lang=matlab><span style=color:#66d9ef>classdef</span> A <span style=color:#f92672>&lt;</span> B
+    <span style=color:#66d9ef>methods</span>
+<span style=color:#66d9ef>        function</span> obj = <span style=color:#a6e22e>A</span>(~)
+            obj@B(<span style=color:#f92672>~</span>);
+        <span style=color:#66d9ef>end</span>
+    <span style=color:#66d9ef>end</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div><h3 id=matlab-性能优化>MATLAB 性能优化<a hidden class=anchor aria-hidden=true href=#matlab-性能优化>#</a></h3>
+<h4 id=内存角度>内存角度<a hidden class=anchor aria-hidden=true href=#内存角度>#</a></h4>
+<p>MATLAB 中基本单元是矩阵（向量），在内存中是连续存储的，类似于数组。但是 MATLAB 是列优先级的。</p>
+<p>为了节约分配内存的开销，应该提前分配好矩阵的空间，并同时声明好所存储的变量的类型。例如：</p>
+<pre tabindex=0><code>a = zeros(500, 100, 'single');
+</code></pre><p>还要一些其他的注意事项：</p>
+<ul>
+<li>避免创建临时的数据副本。避免创建临时的数据副本，使用嵌套函数来传递参数。
+<ul>
+<li>因为 MATLAB 有类似常量池的概念。即常量数据右值一旦生成就一直保存在内存中。观察以下代码：
+<pre tabindex=0><code>a = 1;
+b = a;
+</code></pre>MATLAB 不会创建一个新的 <code>b</code> 变量，而是让 <code>b</code> 数值句柄指向 <code>1</code> 的内存空间。此时进行下列操作：
+<pre tabindex=0><code>b = 2;
+</code></pre>此时会创建一个新的常量为 <code>2</code>，并让 <code>b</code> 指向这个新的内存空间。而 <code>a</code> 依然指向 <code>1</code> 的变量空间。</li>
+</ul>
+</li>
+<li>定期回收内存。把大数据、大变量保存到文件中，并使用 <code>matfile</code> 函数去访问 <code>mat</code> 文件中的变量，而不必将文件全部加载到内存中；使用 <code>pack</code> 函数对 MATLAB 的内存空间进行整理。</li>
+</ul>
+<h4 id=向量化运算>向量化运算<a hidden class=anchor aria-hidden=true href=#向量化运算>#</a></h4>
+<p>老生常谈了，少用<code>for</code>循环，多用内置函数。</p>
+<blockquote>
+<p>例子：消除冗余元素
+有许多不同的方法可以用来查找向量的冗余元素。一种方法涉及到函数 <code>diff</code>。在对向量元素进行排序后，当您对该向量使用 <code>diff</code> 函数时，相等的邻接元素会产生零项。因为 <code>diff(x)</code> 生成的向量的元素数比 <code>x</code> 少一个，所以您必须添加一个不等于该集中的任何其他元素的元素。<code>NaN</code> 始终满足此条件。最后，您可以使用逻辑索引来选择该集中的唯一元素：</p>
+</blockquote>
+<pre tabindex=0><code>x = [2 1 2 2 3 1 3 2 1 3];
+x = sort(x);
+difference  = diff([x,NaN]);
+y = x(difference~=0)
+</code></pre><h4 id=特例动态编译-jit-与向量化的对比>特例：动态编译 JIT 与向量化的对比<a hidden class=anchor aria-hidden=true href=#特例动态编译-jit-与向量化的对比>#</a></h4>
+<p>考察以下代码：</p>
+<pre tabindex=0><code>clear;
+y = [3; 4; 1; 10; 9; 9; 4; 2; ];
+tic
+m = length(y);
+Y = zeros(m, 10);
+for i = 1:m
+    Y(i, y(i)) = 1;
+end
+toc
+</code></pre><p><code>历时 0.005438 秒。</code></p>
+<pre tabindex=0><code>clear(&quot;Y&quot;,&quot;m&quot;,&quot;i&quot;);
+tic
+Y = full(sparse(1:length(y), y, ones(length(y),1)));
+toc
+</code></pre><p><code>历时 0.021157 秒。</code></p>
+<p><strong>结论</strong></p>
+<p>按照一般性的认知，第二段代码采用了向量化的方法，与第一段使用 <code>for</code> 循环的代码相比，应当拥有更好的性能。但实际上，第一段代码的耗时是第二段的四分之一。原因是 MATLAB 会针对某些循环语句采用 JIT 优化，此时在编译层面上对代码的性能进行了优化，因此运行速度反超了向量化代码。</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://loganchow.github.io/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/>面向对象</a></li>
+<li><a href=https://loganchow.github.io/tags/oop/>OOP</a></li>
+<li><a href=https://loganchow.github.io/tags/matlab/>MATLAB</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=https://loganchow.github.io/posts/matlab_oop1/>
+<span class=title>下一页 »</span>
+<br>
+<span>MATLAB 面向对象编程 小结1</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2021 <a href=https://loganchow.github.io/>Mens et Manus</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://git.io/hugopapermod rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)},document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
