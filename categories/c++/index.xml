@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>C&#43;&#43; on Mens et Manus</title>
+    <link>https://loganchow.github.io/categories/c&#43;&#43;/</link>
+    <description>Recent content in C&#43;&#43; on Mens et Manus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 16 Oct 2021 23:46:20 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/categories/c++/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>STL小结1</title>
+      <link>https://loganchow.github.io/posts/stl%E5%B0%8F%E7%BB%931/</link>
+      <pubDate>Sat, 16 Oct 2021 23:46:20 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/posts/stl%E5%B0%8F%E7%BB%931/</guid>
+      <description>顺序容器 可以顺序访问(std::iterator)
+   容器 存储结构 查改 增删     std::vector 数组，连续内存空间 随机访问 除尾部之外都很慢   std::deque 多个缓冲区相接，由中央控制器管理 随机访问    std::list 双向链表 不能随机访问 很快   std::forward_list 单向链表 不能随机访问 很快    关联容器 随机访问
+   容器 存储结构 查改 增删     std::map      std::set      std::multimap      std::multiset       适配器 一共三种</description>
+    </item>
+    
+  </channel>
+</rss>
