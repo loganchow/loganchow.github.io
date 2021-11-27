@@ -47,6 +47,7 @@ disableShare: true
         end
    end
    ```
+    一般`set`方法不允许用户自行设置，但可以用来作为入参检查。
 
 3. 按需计算的类属性（易变值）
     ```matlab
