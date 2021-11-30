@@ -87,4 +87,15 @@ toc
 
 **结论**
 
-按照一般性的认知，第二段代码采用了向量化的方法，与第一段使用 `for` 循环的代码相比，应当拥有更好的性能。但实际上，第一段代码的耗时是第二段的四分之一。原因是 MATLAB 会针对某些循环语句采用 JIT 优化，此时在编译层面上对代码的性能进行了优化，因此运行速度反超了向量化代码。
+按照一般性的认知，第二段代码采用了向量化的方法，与第一段使用 `for` 循环的代码相比，应当拥有更好的性能。但实际上，第一段代码的耗时是第二段的四分之一。原因是 MATLAB 会针对某些循环语句采用 JIT 优化，此时在编译层面上对代码的性能进行了优化，因此运行速度反超了向量化代码。[^1]
+
+同时这也解释了为什么每当我们打开一些旧代码， MATLAB 会在 `clear all` 代码下方打波浪线，并提示这样写会降低性能。因为 `clear` 只会清理工作区的变量，而 `clear all` 同时也会清理掉已经编译过的代码，使得下次运行到可加速的代码段时需要重新编译，这是一笔不小的性能开销。
+
+MATLAB JIT 是从 R2015a 版本开始附带的，打开自己 MATLAB 的 JIT 与 加速器的方法是：
+```matlab
+feature JIT on
+feature accel on
+```
+
+
+[^1]: [Run Code Faster With the New MATLAB Execution Engine](https://blogs.mathworks.com/loren/2016/02/12/run-code-faster-with-the-new-matlab-execution-engine/)
