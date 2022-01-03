@@ -16,7 +16,7 @@
 <link rel=mask-icon href=https://loganchow.github.io/safari-pinned-tab.svg>
 <meta name=theme-color content="#2e2e33">
 <meta name=msapplication-TileColor content="#2e2e33">
-<meta name=generator content="Hugo 0.89.4">
+<meta name=generator content="Hugo 0.91.2">
 <link rel=alternate type=application/rss+xml href=https://loganchow.github.io/tags/ros/index.xml>
 <noscript>
 <style>#theme-toggle,.top-link{display:none}</style>
@@ -71,6 +71,26 @@
 </header>
 <article class="post-entry tag-entry">
 <header class=entry-header>
+<h2>ROS学习笔记2
+</h2>
+</header>
+<section class=entry-content>
+<p>记录一次在 ROS 学习过程中遇到的问题
+message_filter 的使用方法 问题背景 现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。
+问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：
+怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去 解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。
+定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。
+使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。
+解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。
+使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。
+实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：
+// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr& qtSource, const msgs_record::glosaConstPtr& msgSource); ... // 绑定回调函数 sync....</p>
+</section>
+<footer class=entry-footer>January 3, 2022&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me</footer>
+<a class=entry-link aria-label="post link to ROS学习笔记2" href=https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
 <h2>ROS 学习笔记1
 </h2>
 </header>
@@ -96,7 +116,7 @@ Service通信是一对一通信，信息流是双向的，而且客户端与服�
 </article>
 </main>
 <footer class=footer>
-<span>&copy; 2021 <a href=https://loganchow.github.io/>Mens et Manus</a></span>
+<span>&copy; 2022 <a href=https://loganchow.github.io/>Mens et Manus</a></span>
 <span>
 Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &

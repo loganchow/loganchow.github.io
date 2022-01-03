@@ -1,0 +1,211 @@
+<!doctype html><html lang=zh dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>ROS学习笔记2 | Mens et Manus</title>
+<meta name=keywords content="ROS">
+<meta name=description content="记录一次在 ROS 学习过程中遇到的问题
+ message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。
+ 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：
+ 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。
+定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。
+使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。
+解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。
+使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。
+实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：
+// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr& qtSource, const msgs_record::glosaConstPtr& msgSource); ... // 绑定回调函数 sync.">
+<meta name=author content="Me">
+<link rel=canonical href=https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/>
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw+W8mWdq36u97PLc=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://loganchow.github.io/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://loganchow.github.io/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://loganchow.github.io/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://loganchow.github.io/apple-touch-icon.png>
+<link rel=mask-icon href=https://loganchow.github.io/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.91.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-138915624-1','auto'),ga('send','pageview'))</script><meta property="og:title" content="ROS学习笔记2">
+<meta property="og:description" content="记录一次在 ROS 学习过程中遇到的问题
+ message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。
+ 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：
+ 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。
+定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。
+使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。
+解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。
+使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。
+实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：
+// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr& qtSource, const msgs_record::glosaConstPtr& msgSource); ... // 绑定回调函数 sync.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-01-03T16:18:53+08:00">
+<meta property="article:modified_time" content="2022-01-03T16:18:53+08:00"><meta property="og:site_name" content="Mens et Manus">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="ROS学习笔记2">
+<meta name=twitter:description content="记录一次在 ROS 学习过程中遇到的问题
+ message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。
+ 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：
+ 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。
+定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。
+使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。
+解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。
+使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。
+实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：
+// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr& qtSource, const msgs_record::glosaConstPtr& msgSource); ... // 绑定回调函数 sync.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://loganchow.github.io/posts/"},{"@type":"ListItem","position":2,"name":"ROS学习笔记2","item":"https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"ROS学习笔记2","name":"ROS学习笔记2","description":"记录一次在 ROS 学习过程中遇到的问题\n message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。\n 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：\n 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。\n定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。\n使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。\n解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。\n使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。\n实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：\n// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr\u0026amp; qtSource, const msgs_record::glosaConstPtr\u0026amp; msgSource); ... // 绑定回调函数 sync.","keywords":["ROS"],"articleBody":" 记录一次在 ROS 学习过程中遇到的问题\n message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。\n 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：\n 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。\n定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。\n使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。\n解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。\n使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。\n实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：\n// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr\u0026 qtSource, const msgs_record::glosaConstPtr\u0026 msgSource); ... // 绑定回调函数 sync.registerCallback(boost::bind(\u0026ROSHandler::callbackSocket, _1, _2)); 编译时遇到如下错误(节选)：\n/usr/include/boost/bind/bind.hpp:69:37: error: ‘void (ROSHandler::*)(const glosa::qt_GUI_ \u0026, const msgs_record::glosa_ \u0026)’ is not a class, struct, or union type typedef typename F::result_type type; ^ 编译错误提示原文巨长，不知其所以然也。\n后查阅资料与论坛，发现 boost::bind 对于绑定类的成员函数需要占用一个 placeholder 来传入对象指针，因此，添加 this 指针来指向对象本体，代码修改如下：\nsync.registerCallback(boost::bind(\u0026ROSHandler::callbackSocket, this, _1, _2)); 编译通过。\n或者创建指向对象的类成员指针变量 obj_ 亦可达到同样效果。\nROSHandler::ROSHandler() { ROSHandler* obj_ = new ROSHandler(); } ROSHandler::~ROSHandler() { delete obj_; } ... sync.registerCallback(boost::bind(\u0026ROSHandler::callbackSocket, obj_, _1, _2)); ","wordCount":"125","inLanguage":"zh","datePublished":"2022-01-03T16:18:53+08:00","dateModified":"2022-01-03T16:18:53+08:00","author":{"@type":"Person","name":"Me"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/"},"publisher":{"@type":"Organization","name":"Mens et Manus","logo":{"@type":"ImageObject","url":"https://loganchow.github.io/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://loganchow.github.io/ accesskey=h title="Logan's Space (Alt + H)">Logan's Space</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://loganchow.github.io/archives title=归档>
+<span>归档</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/categories/ title=分类>
+<span>分类</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/search/ title=搜索>
+<span>搜索</span>
+</a>
+</li>
+<li>
+<a href=https://loganchow.github.io/tags/ title=标签>
+<span>标签</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://loganchow.github.io/>主页</a>&nbsp;»&nbsp;<a href=https://loganchow.github.io/posts/>Posts</a></div>
+<h1 class=post-title>
+ROS学习笔记2
+</h1>
+<div class=post-meta>January 3, 2022&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;Me&nbsp;|&nbsp;<a href=https://github.com/loganchow/loganchow.github.io/content/posts/ROS%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b02.md rel="noopener noreferrer" target=_blank>Suggest Changes</a>
+</div>
+</header> <div class=toc>
+<details>
+<summary accesskey=c title="(Alt + C)">
+<span class=details>目录</span>
+</summary>
+<div class=inner><ul>
+<li>
+<a href=#message_filter-%e7%9a%84%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95 aria-label="message_filter 的使用方法"><code>message_filter</code> 的使用方法</a><ul>
+<ul>
+<li>
+<a href=#%e9%97%ae%e9%a2%98%e8%83%8c%e6%99%af aria-label=问题背景>问题背景</a></li>
+<li>
+<a href=#%e9%97%ae%e9%a2%98%e5%89%96%e6%9e%90 aria-label=问题剖析>问题剖析</a><ul>
+<li>
+<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95%e4%b8%80rosmultithreadedspin--pthreadrwlock aria-label="解决方法一：ros::MultiThreadedSpin() + pthread::rwlock">解决方法一：<code>ros::MultiThreadedSpin()</code> + <code>pthread::rwlock</code></a></li>
+<li>
+<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95%e4%ba%8cmessage_filtersubscriber--message_filterssync_policiesapproximatetime aria-label="解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime">解决方法二：<code>message_filter::Subscriber</code> + <code>message_filters::sync_policies::ApproximateTime</code></a></li></ul>
+</li>
+<li>
+<a href=#%e5%ae%9e%e6%93%8d%e9%97%ae%e9%a2%98%e5%8d%95-boostbind-%e6%96%b9%e6%b3%95%e7%9a%84%e9%97%ae%e9%a2%98 aria-label="实操问题单: boost::bind() 方法的问题">实操问题单: <code>boost::bind()</code> 方法的问题</a>
+</li>
+</ul>
+</ul>
+</li>
+</ul>
+</div>
+</details>
+</div>
+<div class=post-content><blockquote>
+<p>记录一次在 ROS 学习过程中遇到的问题</p>
+</blockquote>
+<h2 id=message_filter-的使用方法><code>message_filter</code> 的使用方法<a hidden class=anchor aria-hidden=true href=#message_filter-的使用方法>#</a></h2>
+<h4 id=问题背景>问题背景<a hidden class=anchor aria-hidden=true href=#问题背景>#</a></h4>
+<blockquote>
+<p>现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。</p>
+</blockquote>
+<h4 id=问题剖析>问题剖析<a hidden class=anchor aria-hidden=true href=#问题剖析>#</a></h4>
+<p>由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：</p>
+<ol>
+<li>怎么保证 JSON 包数据的来源话题尽可能时间上接近</li>
+<li>什么时候调用 socket 把数据发出去</li>
+</ol>
+<h5 id=解决方法一rosmultithreadedspin--pthreadrwlock>解决方法一：<code>ros::MultiThreadedSpin()</code> + <code>pthread::rwlock</code><a hidden class=anchor aria-hidden=true href=#解决方法一rosmultithreadedspin--pthreadrwlock>#</a></h5>
+<p>定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。</p>
+<p>定义套接字为全局变量，在其中一个回调函数中调用 <code>sendto()</code> 方法发送 JSON 包。</p>
+<p>使用<code>ros::MultiThreadedSpin()</code> 来分别调用两话题的回调函数。</p>
+<h5 id=解决方法二message_filtersubscriber--message_filterssync_policiesapproximatetime>解决方法二：<code>message_filter::Subscriber</code> + <code>message_filters::sync_policies::ApproximateTime</code><a hidden class=anchor aria-hidden=true href=#解决方法二message_filtersubscriber--message_filterssync_policiesapproximatetime>#</a></h5>
+<p>使用 <code>message_filter::Subscriber</code> 同时订阅两个话题，使用 <code>ApproximateTime</code> 作为消息订阅的策略，实现两话题的消息时间尽可能接近。</p>
+<p>使用 <code>registerCallback</code> 来定义一个总的回调函数来处理两个话题的数据。</p>
+<h4 id=实操问题单-boostbind-方法的问题>实操问题单: <code>boost::bind()</code> 方法的问题<a hidden class=anchor aria-hidden=true href=#实操问题单-boostbind-方法的问题>#</a></h4>
+<p>按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cxx data-lang=cxx><span style=color:#75715e>// 回调函数声明
+</span><span style=color:#75715e></span><span style=color:#66d9ef>void</span> ROSHandler<span style=color:#f92672>::</span>callbackSocket(<span style=color:#66d9ef>const</span> glosa<span style=color:#f92672>::</span>qt_GUIConstPtr<span style=color:#f92672>&amp;</span> qtSource, <span style=color:#66d9ef>const</span> msgs_record<span style=color:#f92672>::</span>glosaConstPtr<span style=color:#f92672>&amp;</span> msgSource);
+...
+<span style=color:#75715e>// 绑定回调函数
+</span><span style=color:#75715e></span>sync.registerCallback(boost<span style=color:#f92672>::</span>bind(<span style=color:#f92672>&amp;</span>ROSHandler<span style=color:#f92672>::</span>callbackSocket, _1, _2));
+</code></pre></div><p>编译时遇到如下错误(节选)：</p>
+<pre tabindex=0><code>/usr/include/boost/bind/bind.hpp:69:37: error: ‘void (ROSHandler::*)(const glosa::qt_GUI_&lt;std::allocator&lt;void&gt; &gt;&amp;, const msgs_record::glosa_&lt;std::allocator&lt;void&gt; &gt;&amp;)’ is not a class, struct, or union type
+     typedef typename F::result_type type;
+                                     ^
+</code></pre><p>编译错误提示原文巨长，不知其所以然也。</p>
+<p>后查阅资料与论坛，发现 <code>boost::bind</code> 对于绑定<strong>类的成员函数</strong>需要占用一个 <code>placeholder</code> 来传入对象指针，因此，添加 <code>this</code> 指针来指向对象本体，代码修改如下：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cxx data-lang=cxx>sync.registerCallback(boost<span style=color:#f92672>::</span>bind(<span style=color:#f92672>&amp;</span>ROSHandler<span style=color:#f92672>::</span>callbackSocket, <span style=color:#66d9ef>this</span>, _1, _2));
+</code></pre></div><p>编译通过。</p>
+<p>或者创建指向对象的类成员指针变量 <code>obj_</code> 亦可达到同样效果。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cxx data-lang=cxx>ROSHandler<span style=color:#f92672>::</span>ROSHandler() {
+    ROSHandler<span style=color:#f92672>*</span> obj_ <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> ROSHandler();
+}
+ROSHandler<span style=color:#f92672>::~</span>ROSHandler() {
+    <span style=color:#66d9ef>delete</span> obj_;
+}
+...
+sync.registerCallback(boost<span style=color:#f92672>::</span>bind(<span style=color:#f92672>&amp;</span>ROSHandler<span style=color:#f92672>::</span>callbackSocket, obj_, _1, _2));
+</code></pre></div>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://loganchow.github.io/tags/ros/>ROS</a></li>
+</ul>
+<nav class=paginav>
+<a class=next href=https://loganchow.github.io/posts/matlab_oop2/>
+<span class=title>下一页 »</span>
+<br>
+<span>MATLAB 面向对象编程 小结2</span>
+</a>
+</nav>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=https://loganchow.github.io/>Mens et Manus</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://git.io/hugopapermod rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)},document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>

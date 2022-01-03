@@ -5,7 +5,25 @@
     <link>https://loganchow.github.io/posts/</link>
     <description>Recent content in Posts on Mens et Manus</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 27 Nov 2021 15:31:23 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Jan 2022 16:18:53 +0800</lastBuildDate><atom:link href="https://loganchow.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ROS学习笔记2</title>
+      <link>https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</link>
+      <pubDate>Mon, 03 Jan 2022 16:18:53 +0800</pubDate>
+      
+      <guid>https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</guid>
+      <description>记录一次在 ROS 学习过程中遇到的问题
+ message_filter 的使用方法 问题背景  现有一节点需要获取两不同传感器的数据，需要同时订阅两个话题，并将数据整合为一个 JSON 格式的数据帧发送至指定地址的指定端口；要求两帧数据时间戳尽量接近，socket 发送频率不低于 5Hz。
+ 问题剖析 由于数据包不大，且发送频率无上限，故使用 UDP 即可，通过 socket 实现很容易。 JSON 的处理也有第三方库可用。问题关键是：
+ 怎么保证 JSON 包数据的来源话题尽可能时间上接近 什么时候调用 socket 把数据发出去  解决方法一：ros::MultiThreadedSpin() + pthread::rwlock 定义 JSON 数据包为全局变量，分别订阅两个话题，使用两个回调函数，在其中一个回调函数结束写入消息数据时，为全局变量设置读写锁；而另一个回调函数先解锁，再写入消息，再加锁，依次类推。
+定义套接字为全局变量，在其中一个回调函数中调用 sendto() 方法发送 JSON 包。
+使用ros::MultiThreadedSpin() 来分别调用两话题的回调函数。
+解决方法二：message_filter::Subscriber + message_filters::sync_policies::ApproximateTime 使用 message_filter::Subscriber 同时订阅两个话题，使用 ApproximateTime 作为消息订阅的策略，实现两话题的消息时间尽可能接近。
+使用 registerCallback 来定义一个总的回调函数来处理两个话题的数据。
+实操问题单: boost::bind() 方法的问题 按照教程订阅完话题，设置完消息过滤策略后，设置回调函数时，按照教程写下以下代码：
+// 回调函数声明 void ROSHandler::callbackSocket(const glosa::qt_GUIConstPtr&amp;amp; qtSource, const msgs_record::glosaConstPtr&amp;amp; msgSource); ... // 绑定回调函数 sync.</description>
+    </item>
+    
     <item>
       <title>MATLAB 面向对象编程 小结2</title>
       <link>https://loganchow.github.io/posts/matlab_oop2/</link>

@@ -3,7 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://loganchow.github.io/categories/</loc>
-    <lastmod>2021-11-27T15:31:23+08:00</lastmod>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/posts/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/tags/ros/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/tags/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
+  </url><url>
+    <loc>https://loganchow.github.io/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6/</loc>
+    <lastmod>2022-01-03T16:18:53+08:00</lastmod>
   </url><url>
     <loc>https://loganchow.github.io/tags/matlab/</loc>
     <lastmod>2021-11-27T15:31:23+08:00</lastmod>
@@ -11,16 +29,7 @@
     <loc>https://loganchow.github.io/posts/matlab_oop2/</loc>
     <lastmod>2021-11-27T15:31:23+08:00</lastmod>
   </url><url>
-    <loc>https://loganchow.github.io/</loc>
-    <lastmod>2021-11-27T15:31:23+08:00</lastmod>
-  </url><url>
     <loc>https://loganchow.github.io/tags/oop/</loc>
-    <lastmod>2021-11-27T15:31:23+08:00</lastmod>
-  </url><url>
-    <loc>https://loganchow.github.io/posts/</loc>
-    <lastmod>2021-11-27T15:31:23+08:00</lastmod>
-  </url><url>
-    <loc>https://loganchow.github.io/tags/</loc>
     <lastmod>2021-11-27T15:31:23+08:00</lastmod>
   </url><url>
     <loc>https://loganchow.github.io/categories/%E7%BC%96%E7%A8%8B/</loc>
@@ -86,13 +95,7 @@
     <loc>https://loganchow.github.io/tags/%E8%BD%AC%E8%BD%BD/</loc>
     <lastmod>2020-09-18T22:51:34+08:00</lastmod>
   </url><url>
-    <loc>https://loganchow.github.io/tags/ros/</loc>
-    <lastmod>2020-06-18T22:24:42+08:00</lastmod>
-  </url><url>
     <loc>https://loganchow.github.io/posts/ros%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</loc>
-    <lastmod>2020-06-18T22:24:42+08:00</lastmod>
-  </url><url>
-    <loc>https://loganchow.github.io/categories/%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6/</loc>
     <lastmod>2020-06-18T22:24:42+08:00</lastmod>
   </url><url>
     <loc>https://loganchow.github.io/posts/nvdia_chrome_gpu_cache/</loc>
